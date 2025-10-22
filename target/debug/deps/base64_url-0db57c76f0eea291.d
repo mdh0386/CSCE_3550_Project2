@@ -1,0 +1,11 @@
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\base64_url-0db57c76f0eea291.d: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\decode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\encode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\escape.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\unescape.rs
+
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\libbase64_url-0db57c76f0eea291.rlib: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\decode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\encode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\escape.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\unescape.rs
+
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\libbase64_url-0db57c76f0eea291.rmeta: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\decode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\encode.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\escape.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\unescape.rs
+
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\lib.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\decode.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\encode.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\escape.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-url-2.0.2\src\unescape.rs:

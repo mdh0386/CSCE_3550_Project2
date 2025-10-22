@@ -1,0 +1,10 @@
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\icu_normalizer-c83d971ecb1bfc91.d: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\properties.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\provider.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\uts46.rs
+
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\libicu_normalizer-c83d971ecb1bfc91.rlib: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\properties.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\provider.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\uts46.rs
+
+C:\Users\Michael\Documents\Rust Projects\project-2\target\debug\deps\libicu_normalizer-c83d971ecb1bfc91.rmeta: C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\lib.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\properties.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\provider.rs C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\uts46.rs
+
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\lib.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\properties.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\provider.rs:
+C:\Users\Michael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.0.0\src\uts46.rs:
