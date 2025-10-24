@@ -1,24 +1,45 @@
+mod db;
+
+use rsa::{
+    RsaPrivateKey, RsaPublicKey,
+    pkcs1::{EncodeRsaPrivateKey, DecodeRsaPrivateKey, LineEnding},
+    traits::PublicKeyParts,
+};
+use rand::rngs::OsRng;
+use time::OffsetDateTime;
 use chrono::Utc;
-use jsonwebtoken::{encode as jwt_encode, Algorithm, EncodingKey, Header};
-use rsa::pkcs1::LineEnding;
-use rsa::{pkcs1::EncodeRsaPrivateKey, traits::PublicKeyParts, RsaPrivateKey, RsaPublicKey};
+use jsonwebtoken::{encode as jwt_encode, EncodingKey};
 use serde_json::json;
-use std::collections::BTreeMap;
-use std::collections::HashMap;
-use std::time::Duration;
+use std::collections::{BTreeMap, HashMap};
 use warp::Filter;
+
+fn ensure_keys_in_db() {
+    db::init_db().expect("Failed to init DB");
+
+    // Ensure at least one valid and one expired key exists
+    let valid = db::fetch_key(false).unwrap_or(None);
+    let expired = db::fetch_key(true).unwrap_or(None);
+    let hour = 3600i64;
+    let now = OffsetDateTime::now_utc().unix_timestamp();
+
+    if valid.is_none() {
+        let mut rng = OsRng;
+        let priv_key = RsaPrivateKey::new(&mut rng, 2048).unwrap();
+        let pem = priv_key.to_pkcs1_pem(Default::default()).unwrap();
+        db::insert_key(pem.as_bytes(), now + hour).unwrap();
+    }
+
+    if expired.is_none() {
+        let mut rng = OsRng;
+        let priv_key = RsaPrivateKey::new(&mut rng, 2048).unwrap();
+        let pem = priv_key.to_pkcs1_pem(Default::default()).unwrap();
+        db::insert_key(pem.as_bytes(), now - hour).unwrap();
+    }
+}
 
 #[tokio::main]
 async fn main() {
-    // Generate RSA key pair
-    let private_key = RsaPrivateKey::new(&mut rand::thread_rng(), 2048).unwrap();
-    let public_key = RsaPublicKey::from(&private_key);
-    const KID: &str = "goodKID";
-
-    // Convert private key to PEM format
-    let private_key_pem = private_key.to_pkcs1_pem(LineEnding::LF).unwrap();
-
-    let encoding_key = EncodingKey::from_rsa_pem(private_key_pem.as_bytes()).unwrap();
+    ensure_keys_in_db();
 
     let method_not_allowed = warp::any().map(|| {
         warp::reply::with_status(
@@ -27,29 +48,37 @@ async fn main() {
         )
     });
 
+    // JWT Auth endpoint
     let auth = warp::path("auth").and(
         warp::post()
-            .and(warp::query::<HashMap<String, String>>()) // Extract query parameters
-            .map(move |params: HashMap<String, String>| {
-                let mut claims = BTreeMap::new();
-                claims.insert("sub", "1234567890");
-                claims.insert("name", "John Doe");
-                claims.insert("iat", "1516239022");
+            .and(warp::query::<HashMap<String, String>>())
+            .map(|params: HashMap<String, String>| {
+                let expired = params.get("expired").is_some();
 
-                let mut header = Header::default();
-                header.alg = Algorithm::RS256;
+                let keyrow = db::fetch_key(expired)
+                    .unwrap()
+                    .expect("No key in DB");
 
-                let expiration = if params.get("expired").is_some() {
-                    Utc::now() - Duration::from_secs(3600) // Set to an hour ago to make it expired
+                let (kid, pem, _exp) = keyrow;
+                let private_key = RsaPrivateKey::from_pkcs1_pem(std::str::from_utf8(&pem).unwrap()).unwrap();
+                let private_key_pem = private_key.to_pkcs1_pem(LineEnding::LF).unwrap();
+                let encoding_key = EncodingKey::from_rsa_pem(private_key_pem.as_bytes()).unwrap();
+
+                let mut claims: BTreeMap<String, String> = BTreeMap::new();
+                claims.insert("sub".to_string(), "1234567890".to_string());
+                claims.insert("name".to_string(), "John Doe".to_string());
+                claims.insert("iat".to_string(), "1516239022".to_string());
+
+                let mut header = jsonwebtoken::Header::default();
+                header.alg = jsonwebtoken::Algorithm::RS256;
+                header.kid = Some(kid.to_string());
+
+                let expiration = if expired {
+                    Utc::now() - chrono::Duration::hours(1)
                 } else {
-                    Utc::now() + Duration::from_secs(3600) // Valid for an hour
+                    Utc::now() + chrono::Duration::hours(1)
                 };
-                header.kid = Some(KID.to_string());
-                if params.get("expired").is_some() {
-                    header.kid = Some("expiredKID".to_string());
-                }
-                let exp_string = expiration.timestamp().to_string();
-                claims.insert("exp", &exp_string);
+                claims.insert("exp".to_string(), expiration.timestamp().to_string());
 
                 let token = jwt_encode(&header, &claims, &encoding_key).unwrap();
                 warp::reply::with_status(token, warp::http::StatusCode::OK)
@@ -57,39 +86,29 @@ async fn main() {
             .or(method_not_allowed),
     );
 
+    // JWKS endpoint
     let jwks = warp::path!(".well-known" / "jwks.json").and(
-        warp::get()
-            .map(move || {
-                let n = base64_url::encode(&get_modulus(&public_key));
-                let e = base64_url::encode(&get_exponent(&public_key));
-
-                let jwk = json!({
+        warp::get().map(move || {
+            let keyrows = db::fetch_all_valid_keys().unwrap();
+            let jwk_keys: Vec<_> = keyrows.iter().map(|(kid, pem, _exp)| {
+                let private_key = RsaPrivateKey::from_pkcs1_pem(std::str::from_utf8(pem).unwrap()).unwrap();
+                let public_key = RsaPublicKey::from(&private_key);
+                let n = base64_url::encode(&public_key.n().to_bytes_be());
+                let e = base64_url::encode(&public_key.e().to_bytes_be());
+                json!({
                     "kty": "RSA",
-                    "kid": KID,
+                    "kid": kid.to_string(),
                     "use": "sig",
                     "n": n,
                     "e": e,
                     "alg": "RS256"
-                });
-
-                let jwks = json!({
-                    "keys": [jwk]
-                });
-
-                warp::reply::json(&jwks)
-            })
-            .or(method_not_allowed),
+                })
+            }).collect();
+            warp::reply::json(&json!({ "keys": jwk_keys }))
+        })
+        .or(method_not_allowed),
     );
 
     let routes = auth.or(jwks);
-
     warp::serve(routes).run(([127, 0, 0, 1], 8080)).await;
-}
-
-fn get_modulus(public_key: &RsaPublicKey) -> Vec<u8> {
-    public_key.n().to_bytes_be()
-}
-
-fn get_exponent(public_key: &RsaPublicKey) -> Vec<u8> {
-    public_key.e().to_bytes_be()
 }

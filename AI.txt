@@ -1,0 +1,33 @@
+Declaration on the use of generative artificial intelligence
+
+I acknowledge the use of ChatGPT-4 & 5, Free Version (https://chatgpt.com/overview)
+to explain assignment instructions and technical content explanations.
+Additionally, I primarily used it to generate code for this assignment.
+
+List of prompts:
+(Inside GitHub copilot)
+ - I have an assignment for my cybersecurity class. This is the second project
+and builds off of the first. Here are the first project's instructions:
+"[project 1 instructions]." This project (the current repo), does all of this. Now,
+take the following instructions for the next assignment, and tell me an
+overview of what I need to do: "[project 2 instructions]"
+ - Ok, now generate code that would accomplish all of this.
+ - Stop, sorry. Remember that the project is currently all in rust. Use the files
+from the project 2 repo and tell me what needs to be modified or new files to be created.
+ - Ok, now generate code that would accomplish all of this and show me where to add it in
+which files.
+ - My Cargo.toml is this now: "[pasted file]" Where do I add: "[code]"
+ - If src/main.rs is currently: "[pasted file]" Add this: "[code]" near
+the top (and import the DB functions).
+ - Why did you delete code instead of combining them?
+ - I ran gradebot.exe project2 and got this error: "[error]"
+ - I did cargo run and got this: "[error]"
+ - Show where steps 6 and 7 would be in the main file
+ - Now cargo run got this: "[error]"
+ - Still errors. Fix please: "[error]"
+
+(On chatgpt.com)
+ - Here is code in my main.rs file: "[pasted file]". I am getting this
+error when doing cargo run: "[error]" 
+ - Still errors: "[error]"
+ - [And so on of generate prompts and debugging prompts]
